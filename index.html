@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Đỏ Đậm | Lập Trình Viên Chuyên Nghiệp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CSS BIẾN & CƠ BẢN (HỖ TRỢ CẢ 2 CHẾ ĐỘ DARK & LIGHT) --- */
+        :root {
+            --bg-color: #0d1117; /* Mặc định là Dark Mode */
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --header-bg: rgba(22, 27, 34, 0.95);
+            --border-color: #30363d;
+            --accent-color: #ef4444; /* Màu đỏ chủ đạo */
+            --accent-hover: #dc2626;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8f9fa; /* Chế độ Light Mode */
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #e5e7eb;
+            --accent-color: #dc2626; /* Đậm hơn chút khi nền sáng */
+            --accent-hover: #b91c1c;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- HEADER & MENU --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .logo span { color: var(--accent-color); }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: 100%;
+        }
+        
+        nav ul li a:hover, nav ul li a.active { color: var(--accent-color); }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        #theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        #theme-toggle:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        /* --- SECTION CHUNG --- */
+        section {
+            padding: 7rem 5% 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2.section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        h2.section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- PHẦN GIỚI THIỆU (HERO) --- */
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            gap: 3rem;
+            text-align: left;
+        }
+
+        .hero-content { flex: 1.5; }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            color: var(--text-color);
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            opacity: 0.9;
+        }
+
+        .btn-group { display: flex; gap: 1rem; }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        .btn-outline:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .hero-img {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .hero-img::before {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: var(--accent-color);
+            filter: blur(80px);
+            opacity: 0.25;
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hero-img img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid var(--card-bg);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        /* --- KỸ NĂNG (SKILLS) --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+        }
+
+        .skill-card i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 20px;
+            border-radius: 50%;
+        }
+        .skill-card h3 { color: var(--text-color); margin-bottom: 0.5rem; }
+        .skill-card p { opacity: 0.8; font-size: 0.9rem; }
+
+        /* --- DỰ ÁN (PROJECTS) --- */
+        .project-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.2);
+        }
+
+        .project-img {
+            height: 200px;
+            background: linear-gradient(45deg, var(--card-bg), var(--border-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            opacity: 0.8;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .project-info { padding: 2rem; }
+        .project-info h3 { color: var(--text-color); margin-bottom: 0.5rem; }
+        .project-info p {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+        }
+        .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .tag {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* --- LIÊN HỆ (CONTACT) --- */
+        .contact-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .char-count {
+            font-size: 0.8rem;
+            text-align: right;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .success-msg {
+            color: #34d399;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            background: rgba(52, 211, 153, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            margin-top: 6rem;
+        }
+        footer p { opacity: 0.7; font-size: 0.9rem; }
+        footer .social-links {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        footer .social-links a {
+            color: var(--text-color);
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+        footer .social-links a:hover { color: var(--accent-color); }
+
+        /* --- RESPONSIVE MOBILE & TABLET --- */
+        @media (max-width: 768px) {
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--card-bg);
+                border-bottom: 1px solid var(--border-color);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+            }
+            nav.show {
+                max-height: 350px;
+            }
+            nav ul {
+                flex-direction: column;
+                padding: 1.5rem;
+                gap: 1rem;
+                text-align: center;
+            }
+            .hamburger { display: block; }
+            #hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding-top: 10rem;
+                min-height: auto;
+            }
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1rem; }
+            .btn-group { justify-content: center; }
+            .hero-img img { width: 200px; height: 200px; margin-bottom: 2rem;}
+            .hero-img::before { width: 150px; height: 150px; }
+            h2.section-title { font-size: 2rem; }
+            section { padding: 5rem 5% 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER / MENU -->
+    <header>
+        <div class="logo">PORTFOLIO<span>.RED</span></div>
+        <div class="nav-container">
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="#hero" class="active">Trang chủ</a></li>
+                    <li><a href="#about">Giới thiệu</a></li>
+                    <li><a href="#skills">Kỹ năng</a></li>
+                    <li><a href="#projects">Dự án</a></li>
+                    <li><a href="#contact">Liên hệ</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <!-- NÚT BẤM CHUYỂN ĐỔI DARK / LIGHT MODE -->
+                <button id="theme-toggle" title="Chuyển đổi giao diện sáng/tối">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
+                </button>
+                <div class="hamburger" id="hamburger-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PHẦN GIỚI THIỆU (HERO) -->
+    <section id="hero">
+        <div class="hero-content">
+            <h1>Xin chào, tôi là <br><span style="color: var(--accent-color);">Lập Trình Viên Chuyên Nghiệp</span></h1>
+            <p>Tôi là một Full-Stack Developer chuyên tạo ra các ứng dụng web mạnh mẽ, hiệu suất cao và giao diện người dùng ấn tượng.</p>
+            <div class="btn-group">
+                <a href="#projects" class="btn">Xem Dự Án</a>
+                <a href="#contact" class="btn btn-outline">Liên Hệ</a>
+            </div>
+        </div>
+        <div class="hero-img">
+            <img src="https://png.pngtree.com/png-clipart/20240619/original/pngtree-beautiful-letter-n-png-image_15362057.png" alt="Avatar Lập Trình Viên">
+        </div>
+    </section>
+
+    <!-- PHẦN GIỚI THIỆU CHI TIẾT -->
+    <section id="about">
+        <h2 class="section-title">Về Bản Thân</h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto; font-size: 1.1rem; opacity: 0.9;">
+            Với hơn 3 năm kinh nghiệm trong ngành phát triển phần mềm, tôi không chỉ viết code mà còn xây dựng các giải pháp. Tôi đặc biệt yêu thích việc giải quyết các bài toán kỹ thuật phức tạp và không ngừng cập nhật các công nghệ mới như React, Node.js và Cloud Computing.
+        </p>
+    </section>
+
+    <!-- DANH SÁCH KỸ NĂNG (SKILLS) -->
+    <section id="skills">
+        <h2 class="section-title">Bộ Kỹ Năng</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <i class="fa-brands fa-react"></i>
+                <h3>Frontend</h3>
+                <p>ReactJS, Vue.js, HTML5/CSS3, JavaScript (ES6+), Tailwind CSS.</p>
+            </div>
+            <div class="skill-card">
+                <i class="fa-brands fa-node-js"></i>
+                <h3>Backend</h3>
+                <p>Node.js, Express, NestJS, RESTful APIs, GraphQL.</p>
+            </div>
+            <div class="skill-card">
+                <i class="fa-solid fa-database"></i>
+                <h3>Database</h3>
+                <p>MongoDB, PostgreSQL, MySQL, Redis.</p>
+            </div>
+            <div class="skill-card">
+                <i class="fa-solid fa-cloud"></i>
+                <h3>DevOps & Tools</h3>
+                <p>Docker, AWS, CI/CD, Git, Nginx.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DANH SÁCH DỰ ÁN (PROJECTS) -->
+    <section id="projects">
+        <h2 class="section-title">Dự Án Tiêu Biểu</h2>
+        
+        <div class="project-filter">
+            <button class="filter-btn active" data-filter="all">Tất cả</button>
+            <button class="filter-btn" data-filter="frontend">Frontend</button>
+            <button class="filter-btn" data-filter="fullstack">Full-Stack</button>
+        </div>
+
+        <div class="projects-grid" id="project-list">
+            <div class="project-card" data-category="fullstack">
+                <div class="project-img">SaaS Platform UI</div>
+                <div class="project-info">
+                    <h3>Nền tảng quản lý công việc</h3>
+                    <p>Ứng dụng SaaS giúp doanh nghiệp theo dõi tiến độ dự án, phân công nhân sự và tạo báo cáo tự động.</p>
+                    <div class="tags">
+                        <span class="tag">ReactJS</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">PostgreSQL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card" data-category="frontend">
+                <div class="project-img">E-commerce Redesign</div>
+                <div class="project-info">
+                    <h3>Giao diện Thương mại điện tử</h3>
+                    <p>Thiết kế lại giao diện người dùng cho một trang web bán lẻ, tập trung vào trải nghiệm mua sắm và tối ưu tốc độ.</p>
+                    <div class="tags">
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">Tailwind CSS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card" data-category="fullstack">
+                <div class="project-img">Realtime Chat App</div>
+                <div class="project-info">
+                    <h3>Ứng dụng Chat thời gian thực</h3>
+                    <p>Hệ thống nhắn tin nhanh cho phép người dùng tạo phòng chat, gửi tin nhắn và chia sẻ tệp tin tức thì.</p>
+                    <div class="tags">
+                        <span class="tag">MERN Stack</span>
+                        <span class="tag">Socket.io</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM LIÊN HỆ (CONTACT) -->
+    <section id="contact">
+        <h2 class="section-title">Liên Hệ Hợp Tác</h2>
+        <div class="contact-container">
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Tên của bạn</label>
+                    <input type="text" id="name" placeholder="Nhập tên đầy đủ...">
+                    <div class="error-msg" id="name-error">Vui lòng nhập tên (ít nhất 2 ký tự)!</div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email liên hệ</label>
+                    <input type="email" id="email" placeholder="your.email@example.com">
+                    <div class="error-msg" id="email-error">Địa chỉ email không hợp lệ!</div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Nội dung tin nhắn</label>
+                    <textarea id="message" rows="5" placeholder="Nhập nội dung hợp tác..." maxlength="300"></textarea>
+                    <div class="char-count"><span id="current-chars">0</span>/300 ký tự</div>
+                    <div class="error-msg" id="message-error">Nội dung phải có từ 20 đến 300 ký tự!</div>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Gửi Yêu Cầu</button>
+                <div class="success-msg" id="success-message">Tin nhắn của bạn đã được gửi thành công! Cảm ơn bạn.</div>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="social-links">
+            <a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+        <p>&copy; <span id="current-year"></span> Portfolio. All rights reserved. Built with passion & <span style="color: var(--accent-color);">RED</span>.</p>
+    </footer>
+
+    <!-- JAVASCRIPT XỬ LÝ TƯƠNG TÁC -->
+    <script>
+        // 1. MENU HAMBURGER CHO MOBILE
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburgerBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('show');
+        });
+
+        document.querySelectorAll('#nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('show');
+            });
+        });
+
+        // 2. CHỨC NĂNG CHUYỂN ĐỔI DARK / LIGHT MODE
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            let currentTheme = htmlElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fa-solid fa-sun'; // Đổi thành icon mặt trời
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fa-solid fa-moon'; // Đổi thành icon mặt trăng
+            }
+        });
+
+     
+        const sections = document.querySelectorAll('section');
+        const navItems = document.querySelectorAll('#nav-menu a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').substring(1) === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // 4. ĐẾM KÝ TỰ CHO TEXTAREA
+        const messageInput = document.getElementById('message');
+        const currentChars = document.getElementById('current-chars');
+
+        messageInput.addEventListener('input', () => {
+            currentChars.textContent = messageInput.value.length;
+        });
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelector('.filter-btn.active').classList.remove('active');
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 6. VALIDATE FORM
+        const contactForm = document.getElementById('contact-form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const messageError = document.getElementById('message-error');
+        const successMessage = document.getElementById('success-message');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            if (nameInput.value.trim().length < 2) {
+                nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                nameError.style.display = 'none';
+            }
+
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (!emailRegex.test(emailInput.value.trim())) {
+                emailError.style.display = 'block';
+                isValid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            const messageLen = messageInput.value.trim().length;
+            if (messageLen < 20 || messageLen > 300) {
+                messageError.style.display = 'block';
+                isValid = false;
+            } else {
+                messageError.style.display = 'none';
+            }
+
+            if (isValid) {
+                successMessage.style.display = 'block';
+                contactForm.reset();
+                currentChars.textContent = '0';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
